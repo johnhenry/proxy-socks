@@ -1,0 +1,29 @@
+{
+  "name": "proxy-socks",
+  "version": "0.0.0",
+  "description": "Reverse proxy HTTP requests over web sockets",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnhenry/proxy-socks.git"
+  },
+  "keywords": [
+    "websocket",
+    "reverse-proxy",
+    "socket",
+    "reverse",
+    "proxy",
+    "http",
+    "request",
+    "response"
+  ],
+  "author": "John Henry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johnhenry/proxy-socks/issues"
+  },
+  "homepage": "https://github.com/johnhenry/proxy-socks#readme"
+}
