@@ -1,7 +1,6 @@
 import { Agent } from "../index.mjs";
 import { invertedPromise, routeEmptyFavicon } from "../util/index.mjs";
-import { PORTS } from "./settings.mjs";
-const address = `http://localhost:${PORTS.HANDLING}`;
+const address = `http://localhost:8082`;
 let response, setResponse;
 
 const { serve } = new Agent(address, { reconnect: 1000, log: 2 });

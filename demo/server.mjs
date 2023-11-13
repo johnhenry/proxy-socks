@@ -1,10 +1,9 @@
 import { Server } from "../index.mjs";
-import { PORTS } from "./settings.mjs";
 
 const server = new Server(() => new Response("no responder", { status: 500 })); // TODO: can 'null' be used here? nothing?
 
 // Websocket Endpoint
-Deno.serve({ port: PORTS.HANDLING }, (req) => {
+Deno.serve({ port: 8082 }, (req) => {
   if (req.headers.get("upgrade") !== "websocket") {
     return new Response(null, { status: 501 });
   }
@@ -20,4 +19,4 @@ Deno.serve({ port: PORTS.HANDLING }, (req) => {
 
 // HTTP Endpoint
 
-Deno.serve({ port: PORTS.INCOMING }, server.fetch);
+Deno.serve({ port: 8081 }, server.fetch);

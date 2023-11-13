@@ -23,11 +23,15 @@ const Server = class {
   #agents = new Map();
   #id = null;
   #boundFetch = null;
-  constructor(defaultHandler = () => new Response(null)) {
+  constructor(
+    defaultHandler = () => new Response(null),
+    { strategy = "first" } = { strategy: "first" }
+  ) {
     this.#id = randId("proxy-");
     this.#defaultHandler = defaultHandler;
     this.#connections = [];
     this.#boundFetch = this.unBoundFetch.bind(this);
+    this.strategy = strategy;
   }
   getAgent(connection, connectionId = undefined) {
     if (this.#agents.has(connection)) {
