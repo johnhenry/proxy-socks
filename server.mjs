@@ -113,7 +113,7 @@ const Server = class {
     }
   }
   set strategy(newStrategy) {
-    setStrategy(newStrategy);
+    this.setStrategy(newStrategy);
   }
   get connection() {
     switch (this.#strategy) {
