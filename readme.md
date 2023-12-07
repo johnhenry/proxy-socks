@@ -36,7 +36,7 @@ serve(async (request, { id }) => {
     statusText: "OK",
     headers: {
       "content-type": "application/text",
-      "e-tag": id,
+      etag: id,
     },
   });
 });

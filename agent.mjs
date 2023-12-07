@@ -26,10 +26,11 @@ const Agent = class {
   #handler = () => new Response("empty responder", { status: 500 });
   constructor(
     address,
-    { reconnect, log, abort } = {
+    { reconnect, log, abort, secret } = {
       reconnect: undefined,
       log: 0,
       abort: () => new Response("aborted", { status: 500 }),
+      secret: undefined,
     }
   ) {
     this.#log = log;
@@ -40,16 +41,17 @@ const Agent = class {
     if (this.#log > LOG_LEVELS.WARN) {
       console.log("AgentID", this.#id);
     }
-    this.#connection = this.createConnection(address);
+    this.#connection = this.createConnection(address, secret);
     this.#boundServe = this.unboundServe.bind(this);
   }
-  createConnection(address) {
+  createConnection(address, secret) {
     return new Promise((success) => {
       const connection = new WebSocket(address);
       const handshaker = () => {
         const [send, recieve] = doConnection(connection);
         send({
           kind: "agent",
+          secret,
           agent: this.#id,
         });
         this.#send = send;

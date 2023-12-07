@@ -23,15 +23,17 @@ const Server = class {
   #agents = new Map();
   #id = null;
   #boundFetch = null;
+  #secret = null;
   constructor(
     defaultHandler = () => new Response(null),
-    { strategy = "first" } = { strategy: "first" }
+    { strategy = "first", secret } = { strategy: "first", secret }
   ) {
     this.#id = randId("proxy-");
     this.#defaultHandler = defaultHandler;
     this.#connections = [];
     this.#boundFetch = this.unBoundFetch.bind(this);
     this.strategy = strategy;
+    this.#secret = secret;
   }
   getAgent(connection, connectionId = undefined) {
     if (this.#agents.has(connection)) {
@@ -50,8 +52,13 @@ const Server = class {
   addConnection(connection) {
     return new Promise((succeed, fail) => {
       const handshaker = (event) => {
-        const { kind, agent } = JSON.parse(event.data);
+        const { kind, agent, secret } = JSON.parse(event.data);
         if (kind === "agent") {
+          if (this.#secret && this.#secret !== secret) {
+            connection.close();
+            fail(new Error("handshake failed: secret mismatch"));
+            return;
+          }
           const [send] = this.getAgent(connection, agent);
           send({
             kind: "proxy",
@@ -61,7 +68,7 @@ const Server = class {
           succeed(connection);
         } else {
           connection.close();
-          fail(new Error("handshake failed"));
+          fail(new Error("handshake failed: kind mismatch"));
         }
         connection.removeEventListener("message", handshaker);
       };
